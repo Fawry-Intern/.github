@@ -1,6 +1,6 @@
 ### **REQUIREMENTS**  
 
-- **Java >= 21** (Azul Zulu JVM is tested by our CI on GitHub Actions)  
+- **Java >= 21** 
 - **PostgreSQL 15** (or compatible version)  
 
 To run the required version of the database server in a container instead of installing it manually, use the following command:  
