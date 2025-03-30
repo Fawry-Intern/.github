@@ -460,6 +460,7 @@ erDiagram
 <details>
 <summary>More details</summary>
 UML Diagram
+
 ```mermaid
 classDiagram
     %% Store API and related entities
@@ -540,6 +541,7 @@ classDiagram
 ```
 
 ER Diagram
+
 ```mermaid
 erDiagram
     STORES {
