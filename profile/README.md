@@ -383,7 +383,74 @@ ShippingAPI --> DeliveryPerson : interacts with
 
 <details>
 <summary>More details</summary>
+UML Diagram
 
+```mermaid
+classDiagram
+    %% Product API and related entities
+    class ProductAPI {
+        +POST /products : ProductDTO
+        +GET /products/:id : ProductDTO
+        +GET /products : List~ProductDTO~
+        +GET /products/search : List~ProductDTO~
+        +PUT /products/:id : ProductDTO
+        +DELETE /products/:id : void
+        +GET /products/ids : List~Long~
+    }
+
+    class ProductDTO {
+        + Long id
+        + String name
+        + BigDecimal price
+        + String description
+        + String imageUrl
+        + Instant createdAt
+        + Instant updatedAt
+    }
+
+    %% Product API connections to other services
+    class GatewayAPI {
+        +Routes requests to Product API
+    }
+
+    class StoreAPI {
+        +Fetches product details for inventory
+    }
+
+    class OrderAPI {
+        +Retrieves product details for orders
+    }
+
+    class NotificationAPI {
+        +Sends product update notifications
+    }
+
+    %% Store API connections to other APIs
+    class GatewayAPI {
+        +Routes requests to Store API
+    }
+
+    %% Relationships
+    GatewayAPI --|> ProductAPI: routes requests
+    StoreAPI --|> ProductAPI: fetches product details
+    OrderAPI --|> ProductAPI: retrieves product info
+    ProductAPI --|> NotificationAPI: triggers notifications
+```
+
+ER Diagram 
+
+```mermaid
+erDiagram
+    PRODUCTS {
+        BIGSERIAL product_id PK
+        VARCHAR product_name
+        NUMERIC product_price
+        TEXT description
+        TEXT img_url
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
+```
 </details>
 
 
@@ -392,6 +459,116 @@ ShippingAPI --> DeliveryPerson : interacts with
 
 <details>
 <summary>More details</summary>
+UML Diagram
+```mermaid
+classDiagram
+    %% Store API and related entities
+    class StoreAPI {
+        +POST /stores : StoreDTO
+        +GET /stores/:id : StoreDTO
+        +GET /stores : List<StoreDTO>
+        +PUT /stores/:id : StoreDTO
+        +DELETE /stores/:id : void
+        +GET /stores/:id/stock : List~StockDTO~
+        +POST /stores/:id/stock : StockDTO
+        +PUT /stores/:id/stock/:productId : StockDTO
+        +GET /stores/:id/consumptions : List~ProductConsumptionDTO~
+        +POST /stores/:id/consumptions : ProductConsumptionDTO
+    }
+    
+    class Stores {
+        + Long id
+        + String name
+        + String address
+    }
+
+    class Stock {
+        + Long id
+        + Long productId
+        + Long storeId
+        + Integer availableQuantity
+        + Instant lastUpdated
+    }
+    
+    class ProductConsumption {
+        + Long id
+        + Long productId
+        + Long storeId
+        + BigDecimal price
+        + Long quantity
+        + Instant date
+    }
+    
+    %% Store API connections to other APIs
+    class GatewayAPI {
+        +Routes requests to Store API
+    }
+    
+    class ProductAPI {
+        +GET /api/products/ids : List~ProductResponse~
+    }
+
+    class ProductResponse {
+        + Long id
+        + String name
+        + BigDecimal price
+        + String description
+        + String imageUrl
+        + Instant createdAt
+        + Instant updatedAt
+    }
+    
+    class OrderAPI {
+        +Checks product availability
+        +Reserves products
+    }
+    
+    class NotificationAPI {
+        +Sends inventory alerts
+    }
+    
+    %% Relationships
+    GatewayAPI --|> StoreAPI: routes requests
+    StoreAPI --|> ProductResponse: retrieves product details
+    ProductResponse --|> ProductAPI: fetches from
+    OrderAPI --|> StoreAPI: checks availability
+    StoreAPI --|> NotificationAPI: triggers inventory alerts
+    
+    StoreAPI -- Stores: manages
+    Stores "1" -- "*" Stock: contains
+    Stores "1" -- "*" ProductConsumption: records
+```
+
+ER Diagram
+```mermaid
+erDiagram
+    STORES {
+        BIGSERIAL store_id PK
+        VARCHAR store_name "UNIQUE"
+        VARCHAR store_address
+    }
+    
+    STOCK {
+        BIGSERIAL stock_id PK
+        BIGINT product_id
+        BIGINT store_id FK
+        INT stock_available_quantity
+        TIMESTAMP stock_last_updated
+    }
+    
+    PRODUCT_CONSUMPTIONS {
+        BIGSERIAL consumption_id PK
+        BIGINT product_id
+        BIGINT store_id FK
+        NUMERIC product_price
+        BIGINT consumption_quantity
+        TIMESTAMP consumption_date
+    }
+    
+    STORES ||--o{ STOCK : "has"
+    STORES ||--o{ PRODUCT_CONSUMPTIONS : "has"
+    STOCK }o--|| PRODUCT_CONSUMPTIONS : "tracks products"
+```
 
 </details>
 
