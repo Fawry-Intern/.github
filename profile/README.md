@@ -76,7 +76,7 @@ The Angular frontend will be accessible at `http://localhost:4200/` by default.
 - **Description**: Routes requests to other services, handles authentication, and provides a centralized entry point.  
 
 <details>
-<summary>More Details</summary>
+<summary>For More Details</summary>
 
 ## Architecture Diagram
 ```mermaid
