@@ -9,6 +9,7 @@ Our e-commerce platform operates on a **single merchant model** with a **microse
 To help you get started, explore the following sections:
 
 - **[Home](https://github.com/Fawry-Intern/.github/wiki)**: Platform Overview  
+- **[About our team](https://github.com/FawryCommerce/.github/wiki/About-Our-Team)**: Quick introduction to our awesome team
 - **[API Documentation](https://github.com/Fawry-Intern/.github/wiki/API%20Documentation)**: Detailed API References  
 - **[Environment Setup](https://github.com/Fawry-Intern/.github/wiki/Environment%20Setup)**: Setup Instructions  
 - **[Contribution Guide](https://github.com/Fawry-Intern/.github/wiki/Contribution%20Guide)**: Guidelines for Contributing  
